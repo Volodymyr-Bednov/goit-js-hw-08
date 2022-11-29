@@ -17,15 +17,16 @@ const throttle = lThrottle(ev => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const values = getLocalStorageValues();
-  if (!values) return setFormValue('', '');
+  if (!values) return;
   setFormValue(values.email, values.message);
 });
 
 formRef.addEventListener('submit', elem => {
   elem.preventDefault();
   const values = getLocalStorageValues();
-  if (!values) return;
-  setFormValue('', '');
+  if (!values || !formRef.message.value || !formRef.email.value) return;
+
+  setFormValue();
   console.log(values);
   localStorage.removeItem('feedback-form-state');
 });
@@ -33,7 +34,7 @@ formRef.addEventListener('submit', elem => {
 const getLocalStorageValues = () =>
   JSON.parse(localStorage.getItem('feedback-form-state'));
 
-const setFormValue = (mail, msg) => {
+const setFormValue = (mail = '', msg = '') => {
   formRef.email.value = mail;
   formRef.message.value = msg;
 };
